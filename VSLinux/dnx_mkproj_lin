@@ -1,0 +1,139 @@
+#!/bin/sh
+#
+# Copyright (c) 2012, Daynix Computing LTD (www.daynix.com)
+# All rights reserved.
+#
+# This file is a part of Bricklets library, see "Bricklets" page
+# on www.daynix.com for more.
+#
+# Maintained by bricklets@daynix.com
+#
+# This code is licensed under standard 3-clause BSD license.
+# See file LICENSE supplied with this package for the full license text.
+#
+
+SCRIPTNAME=`basename $0`
+BASE_LDIR=~
+CMD_TO_RUN=
+WPATH=
+WDRIVE=
+
+if test "x$VSLINUX_MAP_ROOT" = x
+then 
+  BASE_LDIR=$HOME
+else
+  BASE_LDIR=$VSLINUX_MAP_ROOT
+fi
+
+do_filtering () {
+    abs_builddir=$1
+    abs_top_srcdir=$2
+
+    echo abs_builddir=$abs_builddir
+    echo abs_top_srcdir=$abs_top_srcdir
+
+perl -e '
+    use strict;
+
+    my $builddir=path_to_regexp($ARGV[0]);
+    my $srcdir=$ARGV[1];
+    
+    while (<STDIN>)
+    {
+      my $line=$_;
+      my @file_names = ();
+      
+      #Get all substrings that look like file names from the string
+      if(@file_names = ($line =~ /[\w\d\.\/\-]+\/+/g))
+      {
+        foreach my $file_name (@file_names)
+        {
+           # Store original file name to use it in absolute path case
+           my $orig_file_name = $file_name;
+           my $file_name_regexp = path_to_regexp($file_name);
+           #The following line removes all the leading ../ as we do not know where the real build dir resides.
+           $file_name =~ s/^[\.\/]+//g;
+           my $full_name=trim(`([ -e $file_name ] && readlink -f $file_name) || echo $orig_file_name`);
+           $line =~ s/$file_name_regexp/$full_name\//;
+        }
+      }
+
+      $line =~ s/$builddir/$srcdir/g;
+      #Remove multiple consequent slashes
+      $line =~ s/([a-zA-Z0-9_\.\-])\/+([a-zA-Z0-9_\.\-])/\1\/\2/g;
+      print "$line";
+    }
+
+    sub trim($)
+    {
+        my $string = shift;
+        $string =~ s/^\s+//;
+        $string =~ s/[\s\r]+$//;
+        return $string;
+    }
+
+    sub path_to_regexp($)
+    {
+      my $path = shift;
+      $path =~ s/([\:\\\/\.\,\[\]\+\-\*])/\\$1/g;
+      return $path;
+    }' "`readlink -f $abs_builddir`/" "`readlink -f $abs_top_srcdir`/"
+}
+
+print_help ()   # Print help
+{
+  echo "$SCRIPTNAME [options]"
+  echo ""
+  echo "options:"
+  echo "  -w win_path,"
+  echo "  --win-path win_path     - cmd dir in Windows notation"
+  echo "  -s win_subdir,"
+  echo "  --win-subdir win_subdir - subdir to be ignored in Windows notation"
+  echo "  -x,"
+  echo "  --execute               - command to execute"
+  echo "  -h,"
+  echo "  --help                  - print this help"
+}
+
+until [ -z "$1" ]  # Until all parameters used up . . .
+do
+  case "$1" in
+    -h | --help )
+      print_help
+      ;;
+    -w | --win-path )
+      shift
+      WPATH="$1"
+      ;;
+    -x | --execute )
+      shift
+      CMD_TO_RUN="$1"
+      ;;
+     -* )
+      echo "WARNING: Unknown parameter '$1'"
+      shift
+      ;;
+     * )
+      echo "WARNING: Unknown parameter '$1'"
+      ;;
+  esac
+  shift
+done
+
+#echo WPATH=$WPATH
+#echo CMD_TO_RUN=$CMD_TO_RUN
+
+LPATH=`echo $WPATH | sed -e 's#\\\\#\\/#g' -e "s#^..#$BASE_LDIR#"`
+WDRIVE=`echo $WPATH | sed -e "s#^\(..\).*#\1#g"`
+
+#echo LPATH=$LPATH
+#echo WPATH=$WPATH
+#echo WDRIVE=$WDRIVE
+
+echo "[$LPATH:$CMD_TO_RUN]"
+cd $LPATH && ( sh -c "$CMD_TO_RUN" ) 2>&1 | do_filtering $LPATH/build $LPATH | sed -u -e "s#$BASE_LDIR#$WDRIVE#g" \
+                                                   -e 's#\/#\\#g' \
+                                                   -e "s#\:\([0-9]\+\):#\(\1\) :#" \
+                                                   -e 's#\xE2\x80\x98#"#g' \
+                                                   -e 's#\xE2\x80\x99#"#g'
+

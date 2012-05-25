@@ -1,0 +1,2 @@
+vcxproj:
+	make -C VSLinux $@ SRC_ROOT=`pwd`

@@ -1,0 +1,4 @@
+    <ProjectConfiguration Include="__CFG_NAME__|Win32">
+      <Configuration>__CFG_NAME__</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>

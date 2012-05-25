@@ -1,0 +1,23 @@
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='__CFG_NAME__|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  <IntDir>$(ProjectDir)msvcbld</IntDir>
+    <OutDir>$(ProjectDir)msvcbld</OutDir>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='__CFG_NAME__|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='__CFG_NAME__|Win32'">
+    <NMakeBuildCommandLine>$(ProjectDir)\VSLinux\dnx_mkproj_win.bat -p $(ProjectDir) -c "__CFG_BUILD__"</NMakeBuildCommandLine>
+    <NMakeOutput></NMakeOutput>
+    <NMakeCleanCommandLine>$(ProjectDir)\VSLinux\dnx_mkproj_win.bat -p $(ProjectDir) -c "__CFG_CLEAN__"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>$(ProjectDir)\VSLinux\dnx_mkproj_win.bat -p $(ProjectDir) -c "__CFG_REBUILD__"</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeForcedIncludes>$(ProjectDir)\.config.h</NMakeForcedIncludes>
+    <NMakeIncludeSearchPath>$(ProjectDir)\wireless\driver\linux</NMakeIncludeSearchPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='__CFG_NAME__|Win32'">
+    <BuildLog>
+      <Path>$(OutDir)\$(ConfigurationName)_BuildLog.htm</Path>
+    </BuildLog>
+  </ItemDefinitionGroup>

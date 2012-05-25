@@ -1,0 +1,32 @@
+#
+# Copyright (c) 2012, Daynix Computing LTD (www.daynix.com)
+# All rights reserved.
+#
+# Maintained by bricklets@daynix.com
+#
+# This file is a part of Bricklets library, see "Bricklets" page
+# on www.daynix.com for more.
+#
+# This code is licensed under standard 3-clause BSD license.
+# See file LICENSE supplied with this package for the full license text.
+#
+
+# This is a list of build configurations for dnx_list_files.pl script.
+# File syntax:
+#      Line started with # is a comment line, ignored by the script.
+#      Configuration is defined by following directives
+#
+#      Configuration build command:
+#          <configuration name>.build = <command>
+#      Configuration re-build command:
+#          <configuration name>.rebuild = <command>
+#      Configuration clean command:
+#          <configuration name>.clean = <command>
+
+all.build    = make all
+all.rebuild  = make clean all
+all.clean    = make clean
+
+configure.build    = ./configure
+configure.rebuild  = ./configure
+configure.clean    = echo No clean for configure
