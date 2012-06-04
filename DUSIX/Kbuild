@@ -1,0 +1,43 @@
+# 
+# Copyright (c) 2012, Daynix Computing LTD (www.daynix.com)
+# All rights reserved.
+#
+# Maintained by bricklets@daynix.com
+#
+# This file is a part of Bricklets library, see "Bricklets" page
+# on www.daynix.com for more.
+#
+# This code is licensed under standard 3-clause BSD license.
+# See file LICENSE supplied with this package for the full license text.
+#
+
+obj-m := dusix.o
+
+DUSIX_KSOURCES = src/shared/dnx_rmlock.c \
+								 src/linux/kernel/dnx_logger.c \
+								 src/linux/kernel/dnx_mutex.c \
+								 src/linux/kernel/dnx_event.c \
+								 src/linux/kernel/dnx_thread.c \
+								 src/linux/kernel/dnx_mem.c \
+								 src/linux/kernel/dnx_time.c \
+								 src/linux/kernel/dnx_io.c \
+								 src/linux/kernel/dnx_string.c \
+								 src/linux/shared/dnx_err.c
+
+KMOD_SOURCES = src/test/dnx_kmain.c src/test/dnx_test.c
+
+KSOURCES = $(KMOD_SOURCES) $(DUSIX_KSOURCES) 
+
+dusix-objs := $(KSOURCES:.c=.o)
+
+EXTRA_CFLAGS += -I$(PWD)/include
+
+KDIR := /lib/modules/$(shell uname -r)/build
+
+PWD := $(shell pwd)
+
+all:
+	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) clean

@@ -11,20 +11,18 @@
 * See file LICENSE supplied with this package for the full license text.
 */
 
-#ifndef __DNX_TIME_H_
-#define __DNX_TIME_H_
+#include "dnx_time.h"
 
-#include "dnx_types.h"
+#include <linux/delay.h>
+#include <linux/jiffies.h>
 
-#define DNX_MSEC_IN_SEC 1000
-#define DNX_USEC_IN_MSEC 1000
-#define DNX_NSEC_IN_USEC 1000
-#define DNX_USEC_IN_SEC (DNX_MSEC_IN_SEC * DNX_USEC_IN_MSEC)
-#define DNX_NSEC_IN_MSEC (DNX_NSEC_IN_USEC * DNX_USEC_IN_MSEC)
+uint32_t dnx_timestamp(void)
+{
+  return jiffies_to_msecs(jiffies);
+}
 
-uint32_t dnx_timestamp(void);
-
-void dnx_msleep(uint32_t msec);
-
-#endif
+void dnx_msleep(uint32_t msec)
+{
+  msleep(msec);
+}
 

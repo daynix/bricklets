@@ -15,8 +15,7 @@ APP = dusix
 
 SLIB = dusix.a
 
-DUSIX_SOURCES = src/test/dnx_test.c \
-					src/std/dnx_mem.c \
+DUSIX_SOURCES = src/std/dnx_mem.c \
 					src/std/dnx_io.c \
 					src/linux/user/dnx_logger.c \
 					src/linux/user/dnx_time.c \
@@ -27,7 +26,7 @@ DUSIX_SOURCES = src/test/dnx_test.c \
 					src/std/dnx_string.c \
 					src/linux/user/dnx_thread.c
 
-APP_SOURCES = src/test/dnx_test.c
+APP_SOURCES = src/test/dnx_test.c src/test/dnx_main.c
 
 SOURCES = $(DUSIX_SOURCES) $(APP_SOURCES)
 

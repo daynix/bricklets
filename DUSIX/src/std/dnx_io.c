@@ -53,17 +53,3 @@ int dnx_vsnprintf(char *str, unsigned size, const char *fmt, va_list va)
   return vsnprintf(str, size, fmt, va);
 }
 
-int dnx_fprintf(FILE *f, const char *fmt, ...)
-{  
-  int ret;
-  va_list va;
-
-  va_start(va, fmt);
-
-  ret = vfprintf(f, fmt, va);
-
-  va_end(va);
-
-  return ret;
-}
-

@@ -76,7 +76,7 @@ void dnx_test_logger(void)
 
 dnx_status_t dnx_test_time(void)
 {
-  uint32_t timestamp1, timestamp2, counter = 10000;
+  uint32_t timestamp1, timestamp2;
   dnx_status_t rc = DNX_ERR_OK;
 
   timestamp1 = dnx_timestamp();
@@ -87,7 +87,7 @@ dnx_status_t dnx_test_time(void)
     goto Exit;
   }
 
-  while (counter--);
+  dnx_msleep(100);
 
   timestamp2 = dnx_timestamp();
   if (0 == timestamp2)
@@ -124,7 +124,7 @@ void dnx_test_thread(void *ctx)
   dnx_rmlock_rem(lock);
 }
 
-dnx_status_t dnx_test_sync()
+dnx_status_t dnx_test_sync(void)
 {
   dnx_rmlock_t *lock = NULL;
   dnx_thread_t *thread = NULL;
@@ -167,7 +167,7 @@ Exit:
 }
 
 /* add test function for every implemented module. */
-int main(int argc, char **argv)
+void dnx_test_all(void)
 {
   dnx_status_t rc;
 
@@ -205,7 +205,5 @@ int main(int argc, char **argv)
 Exit:
   if (DNX_ERR_OK != rc)
     dnx_printf("DNX OS Abstraction Layer tests failed.\n");
-
-  return 0;
 }
 

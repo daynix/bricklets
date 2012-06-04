@@ -23,7 +23,6 @@
 int dnx_printf(const char *fmt, ...);
 int dnx_snprintf(char *str, unsigned size, const char *fmt, ...);
 int dnx_vsnprintf(char *str, unsigned size, const char *fmt, va_list va);
-int dnx_fprintf(FILE *f, const char *fmt, ...);
 
 void dnx_assert(int cond);
 

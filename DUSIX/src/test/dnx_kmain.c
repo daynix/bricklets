@@ -11,31 +11,26 @@
 * See file LICENSE supplied with this package for the full license text.
 */
 
-#ifndef __DNX_TYPES_H__
-#define __DNX_TYPES_H__
-
-#if (defined(__linux__) && defined(__KERNEL__))
-#include <linux/types.h>
+#include <linux/module.h>
 #include <linux/kernel.h>
-#else
-#include <stdint.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <stdio.h>
-#endif
+#include <linux/init.h>
 
-typedef int bool_t;
+MODULE_LICENSE("BSD");
 
-#ifndef TRUE
-#define TRUE 1
-#endif
+void dnx_test_all(void);
 
-#ifndef FALSE
-#define FALSE 0
-#endif
+static int __init dnx_kinit(void)
+{
+  printk("DUSIX Test Module Loaded\n");
+  dnx_test_all();
+  return 0;
+}
 
-#ifdef _WIN32
-#define __func__ __FUNCTION__
-#endif
+static void __exit dnx_kuninit(void)
+{
+  printk("DUSIX Test Module Unloaded\n");
+}
 
-#endif
+module_init(dnx_kinit);
+module_exit(dnx_kuninit);
+

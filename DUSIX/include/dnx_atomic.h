@@ -16,10 +16,18 @@
 
 #include "dnx_types.h"
 
+#if defined(__linux__) && defined (__KERNEL__)
+typedef atomic_t dnx_atomic32_t;
+#else
 typedef volatile uint32_t dnx_atomic32_t;
+#endif
 
-#ifdef __linux__
+#ifdef __linux__ 
+#ifdef __KERNEL__
+#include "../src/linux/kernel/dnx_atomic_lnx.h"
+#else
 #include "../src/linux/user/dnx_atomic_lnx.h"
+#endif
 #else
 #include "../src/windows/user/dnx_atomic_win.h"
 #endif

@@ -117,6 +117,6 @@ Exit:
   OutputDebugStringA(buff);
 
   if (duplicate_to_stderr)
-    dnx_fprintf(stderr, "%s\n", buff);
+    fprintf(stderr, "%s\n", buff);
 }
 

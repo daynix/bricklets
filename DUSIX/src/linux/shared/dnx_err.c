@@ -13,7 +13,11 @@
 
 #include "dnx_err.h"
 
+#ifdef __KERNEL__
+#include <linux/errno.h>
+#else
 #include <errno.h>
+#endif
 
 dnx_status_t dnx_os_err_to_dnx_err(int rc)
 {

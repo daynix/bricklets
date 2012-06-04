@@ -12,18 +12,48 @@
 */
 
 #include "dnx_io.h"
-
-#include <linux/printk.h>
+#include "dnx_logger.h"
 
 int dnx_printf(const char *fmt, ...)
 {
   int ret;
   va_list va;
+  char buff[DNX_MAX_LOG_BUFF];
 
   va_start(va, fmt);
-  ret = vprintfk(fmt, va);
+  ret = vsnprintf(buff, DNX_MAX_LOG_BUFF, fmt, va);
+  va_end(va);
+
+  printk("%s", buff);
+
+  return ret;
+}
+
+int dnx_snprintf(char *str, unsigned size, const char *fmt, ...)
+{
+  int ret;
+  va_list va;
+
+  va_start(va, fmt);
+
+  ret = vsnprintf(str, size, fmt, va);
+
   va_end(va);
 
   return ret;
+}
+
+int dnx_vsnprintf(char *str, unsigned size, const char *fmt, va_list va)
+{
+  return vsnprintf(str, size, fmt, va);
+}
+
+void dnx_assert(int cond)
+{
+  if (unlikely(!(cond)))
+  {
+    dnx_log_e("Assertion failed!\n");
+    BUG();
+  }
 }
 
