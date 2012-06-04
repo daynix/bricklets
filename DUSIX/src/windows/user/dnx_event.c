@@ -14,38 +14,25 @@
 #include "dnx_event.h"
 #include "dnx_types.h"
 #include "dnx_err.h"
-#include "dnx_mem.h"
 #include "dnx_io.h"
 
-#include <windows.h>
-
-struct dnx_event {
-  HANDLE hEvent;
-};
-
-dnx_status_t dnx_event_init(dnx_event_t **event)
+dnx_status_t dnx_event_init(dnx_event_t *event)
 {
   int os_rc = 0;
   dnx_status_t rc = DNX_ERR_OK;
-  *event = dnx_malloc(sizeof **event);
-  if (NULL == *event)
-  {
-    rc = DNX_ERR_NO_MEM;
-    goto Exit;
-  }
 
-  memset(*event, 0, sizeof **event);
+  DNX_ASSERT(NULL != event);
 
-  (*event)->hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-  if (NULL == (*event)->hEvent)
+  event->hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+  if (NULL == event->hEvent)
   {
     rc = DNX_ERR_UNKNOWN;
     goto Exit;
   }
 
 Exit:
-  if (DNX_ERR_OK != rc && NULL != *event)
-    dnx_event_uninit(*event);
+  if (DNX_ERR_OK != rc && NULL != event)
+    dnx_event_uninit(event);
 
   return rc;
 }
@@ -56,7 +43,6 @@ void dnx_event_uninit(dnx_event_t *event)
   DNX_ASSERT(NULL != event->hEvent);
 
   CloseHandle(event->hEvent);
-  dnx_free(event);
 }
 
 dnx_status_t dnx_event_wait(dnx_event_t *event, uint32_t msec)

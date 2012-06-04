@@ -1,0 +1,32 @@
+/* 
+* Copyright (c) 2012, Daynix Computing LTD (www.daynix.com)
+* All rights reserved.
+*
+* Maintained by bricklets@daynix.com
+*
+* This file is a part of Bricklets library, see "Bricklets" page
+* on www.daynix.com for more.
+*
+* This code is licensed under standard 3-clause BSD license.
+* See file LICENSE supplied with this package for the full license text.
+*/
+
+#ifndef __DNX_THREAD_IN__
+#define __DNX_THREAD_IN__
+
+#include "dnx_event.h"
+
+#include <linux/kthread.h>
+
+typedef void (*dnx_thread_cb_t)(void *ctx);
+
+struct dnx_thread {
+  struct task_struct *kthread;
+  dnx_thread_cb_t cb;
+  dnx_event_t event;
+  void *ctx;
+  volatile bool_t should_exit;
+  bool_t event_initialized;
+};
+
+#endif

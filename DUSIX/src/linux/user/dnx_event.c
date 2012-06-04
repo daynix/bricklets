@@ -12,60 +12,45 @@
 */
 
 #include "dnx_event.h"
-#include "dnx_mem.h"
 #include "dnx_io.h"
 #include "dnx_time.h"
 
-#include <pthread.h>
 #include <time.h>
 #include <string.h>
 
 #define DNX_EVENT_FLAG_MUTEX_INITIALIZED  0x1
 #define DNX_EVENT_FLAG_COND_INITIALIZED   0x2
 
-struct dnx_event {
-  pthread_mutex_t mutex;
-  pthread_cond_t cond;
-  uint8_t flags;
-  volatile bool_t wait;
-};
-
-dnx_status_t dnx_event_init(dnx_event_t **event)
+dnx_status_t dnx_event_init(dnx_event_t *event)
 {
   int os_rc = 0;
   dnx_status_t rc = DNX_ERR_OK;
-  *event = dnx_malloc(sizeof **event);
-  if (NULL == *event)
-  {
-    rc = DNX_ERR_NO_MEM;
-    goto Exit;
-  }
 
-  memset(*event, 0, sizeof **event);
+  DNX_ASSERT(NULL != event);
 
-  os_rc = pthread_mutex_init(&((*event)->mutex), NULL);
+  os_rc = pthread_mutex_init(&event->mutex, NULL);
   if (0 != os_rc)
   {
     rc = dnx_os_err_to_dnx_err(os_rc);
     goto Exit;
   }
 
-  (*event)->flags |= DNX_EVENT_FLAG_MUTEX_INITIALIZED;
+  event->flags |= DNX_EVENT_FLAG_MUTEX_INITIALIZED;
 
-  os_rc = pthread_cond_init(&((*event)->cond), NULL);
+  os_rc = pthread_cond_init(&event->cond, NULL);
   if (0 != os_rc)
   {
     rc = dnx_os_err_to_dnx_err(os_rc);
     goto Exit;
   }
 
-  (*event)->flags |= DNX_EVENT_FLAG_COND_INITIALIZED;
+  event->flags |= DNX_EVENT_FLAG_COND_INITIALIZED;
 
-  (*event)->wait = TRUE;
+  event->wait = TRUE;
 
 Exit:
-  if (DNX_ERR_OK != rc && NULL != *event)
-    dnx_event_uninit(*event);
+  if (DNX_ERR_OK != rc && NULL != event)
+    dnx_event_uninit(event);
 
   return rc;
 }
@@ -87,8 +72,6 @@ void dnx_event_uninit(dnx_event_t *event)
     os_rc = pthread_mutex_destroy(&event->mutex);
     DNX_ASSERT(0 == os_rc);
   }
-
-  dnx_free(event);
 }
 
 dnx_status_t dnx_event_wait(dnx_event_t *event, uint32_t msec)

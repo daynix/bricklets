@@ -17,9 +17,11 @@
 #include "dnx_err.h"
 #include "dnx_types.h"
 
+#include "../src/shared/dnx_rmlock.in"
+
 typedef struct dnx_rmlock dnx_rmlock_t;
 
-dnx_status_t dnx_rmlock_init(dnx_rmlock_t **lock);
+dnx_status_t dnx_rmlock_init(dnx_rmlock_t *lock);
 void dnx_rmlock_uninit(dnx_rmlock_t *lock);
 
 dnx_status_t dnx_rmlock_add_ex(dnx_rmlock_t *lock, uint32_t count);

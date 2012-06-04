@@ -126,9 +126,13 @@ void dnx_test_thread(void *ctx)
 
 dnx_status_t dnx_test_sync(void)
 {
-  dnx_rmlock_t *lock = NULL;
-  dnx_thread_t *thread = NULL;
+  dnx_rmlock_t lock;
+  dnx_thread_t thread;
   dnx_status_t rc;
+  bool_t rmlock_init_done = FALSE, thread_created = FALSE;
+
+  dnx_memset(&lock, 0, sizeof lock);
+  dnx_memset(&thread, 0, sizeof thread);
 
   rc = dnx_rmlock_init(&lock);
   if (DNX_ERR_OK != rc)
@@ -137,16 +141,20 @@ dnx_status_t dnx_test_sync(void)
     goto Exit;
   }
 
-  dnx_rmlock_add(lock);
+  rmlock_init_done = TRUE;
 
-  rc = dnx_thread_create(&thread, dnx_test_thread, lock);
+  dnx_rmlock_add(&lock);
+
+  rc = dnx_thread_create(&thread, dnx_test_thread, &lock);
   if (DNX_ERR_OK != rc)
   {
     dnx_printf("DNX_OS_SYNC_TEST: Failed to create test thread.\n");
     goto Exit;
   }
 
-  rc = dnx_rmlock_wait(lock);
+  thread_created = TRUE;
+
+  rc = dnx_rmlock_wait(&lock);
   if (DNX_ERR_OK != rc)
   {
     dnx_printf("DNX_OS_SYNC_TEST: rmlock wait returned with error = %d.\n",
@@ -157,11 +165,11 @@ dnx_status_t dnx_test_sync(void)
   dnx_printf("DNX_OS_SYNC_TEST: Finished Successfully.\n");
 
 Exit:
-  if (NULL != lock)
-    dnx_rmlock_uninit(lock);
+  if (TRUE == rmlock_init_done)
+    dnx_rmlock_uninit(&lock);
 
-  if (NULL != thread)
-    dnx_thread_exit(thread);
+  if (TRUE == thread_created)
+    dnx_thread_exit(&thread);
 
   return rc;
 }

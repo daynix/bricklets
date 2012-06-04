@@ -16,9 +16,19 @@
 
 #include "dnx_err.h"
 
+#ifdef __linux__
+#ifdef __KERNEL__
+#include "../src/linux/kernel/dnx_mutex.in"
+#else
+#include "../src/linux/user/dnx_mutex.in"
+#endif
+#else
+#include "../src/windows/user/dnx_mutex.in"
+#endif
+
 typedef struct dnx_mutex dnx_mutex_t;
 
-dnx_status_t dnx_mutex_init(dnx_mutex_t **mutex);
+dnx_status_t dnx_mutex_init(dnx_mutex_t *mutex);
 void         dnx_mutex_uninit(dnx_mutex_t *mutex);
 
 void         dnx_mutex_lock(dnx_mutex_t *mutex);

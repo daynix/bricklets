@@ -14,39 +14,23 @@
 #include "dnx_event.h"
 #include "dnx_err.h"
 #include "dnx_io.h"
-#include "dnx_mem.h"
 #include "dnx_string.h"
 
+#include "dnx_event.in"
+
 #include <linux/sched.h>
-#include <linux/wait.h>
 
-#define DNX_EVENT_FLAG_MUTEX_INITIALIZED  0x1
-#define DNX_EVENT_FLAG_COND_INITIALIZED   0x2
-
-struct dnx_event
-{
-  wait_queue_head_t wait_queue;
-  volatile int      wait_flag;
-};
-
-dnx_status_t dnx_event_init(dnx_event_t **event)
+dnx_status_t dnx_event_init(dnx_event_t *event)
 {
   dnx_status_t rc = DNX_ERR_OK;
-  *event = dnx_malloc(sizeof **event);
-  if (NULL == *event)
-  {
-    rc = DNX_ERR_NO_MEM;
-    goto Exit;
-  }
 
-  dnx_memset(*event, 0, sizeof **event);
+  DNX_ASSERT(NULL != event);
 
-  (*event)->wait_flag = 0;
-  init_waitqueue_head(&(*event)->wait_queue);
+  event->wait_flag = 0;
+  init_waitqueue_head(&event->wait_queue);
 
-Exit:
-  if (DNX_ERR_OK != rc && NULL != *event)
-    dnx_event_uninit(*event);
+  if (DNX_ERR_OK != rc && NULL != event)
+    dnx_event_uninit(event);
 
   return rc;
 }
@@ -54,8 +38,6 @@ Exit:
 void dnx_event_uninit(dnx_event_t *event)
 {
   DNX_ASSERT(NULL != event);
-
-  dnx_free(event);
 }
 
 dnx_status_t dnx_event_wait(dnx_event_t *event, uint32_t msec)

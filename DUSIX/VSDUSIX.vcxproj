@@ -29,9 +29,11 @@
     <ClCompile Include="src\shared\dnx_rmlock.c" />
     <ClCompile Include="src\std\dnx_io.c" />
     <ClCompile Include="src\std\dnx_mem.c" />
+    <ClCompile Include="src\test\dnx_main.c" />
     <ClCompile Include="src\test\dnx_test.c" />
     <ClCompile Include="src\windows\user\dnx_event.c" />
     <ClCompile Include="src\windows\user\dnx_logger.c" />
+    <ClCompile Include="src\windows\user\dnx_mutex.c" />
     <ClCompile Include="src\windows\user\dnx_thread.c" />
     <ClCompile Include="src\windows\user\dnx_time.c" />
   </ItemGroup>

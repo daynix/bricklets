@@ -16,31 +16,18 @@
 #include "dnx_string.h"
 #include "dnx_io.h"
 
-#include <linux/semaphore.h>
+#include "dnx_mutex.in"
 
-struct dnx_mutex
-{
-  struct semaphore sem;
-};
-
-dnx_status_t dnx_mutex_init(dnx_mutex_t **mutex)
+dnx_status_t dnx_mutex_init(dnx_mutex_t *mutex)
 {
   dnx_status_t rc = DNX_ERR_OK;
 
-  *mutex = dnx_malloc(sizeof **mutex);
-  if (NULL == *mutex)
-  {
-    rc = DNX_ERR_NO_MEM;
-    goto Exit;
-  }
+  DNX_ASSERT(NULL != mutex);
 
-  dnx_memset(*mutex, 0, sizeof **mutex);
+  sema_init(&mutex->sem, 1);
 
-  sema_init(&(*mutex)->sem, 1);
-
-Exit:
-  if (DNX_ERR_OK != rc && NULL != *mutex)
-    (void)dnx_mutex_uninit(*mutex);
+  if (DNX_ERR_OK != rc && NULL != mutex)
+    (void)dnx_mutex_uninit(mutex);
 
   return rc;
 }
@@ -48,8 +35,6 @@ Exit:
 void dnx_mutex_uninit(dnx_mutex_t *mutex)
 {
   DNX_ASSERT(NULL != mutex);
-
-  dnx_free(mutex);
 }
 
 void dnx_mutex_lock(dnx_mutex_t *mutex)

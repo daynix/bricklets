@@ -12,20 +12,16 @@
 */
 
 #include "dnx_mutex.h"
-#include "dnx_types.h"
 #include "dnx_io.h"
-#include "dnx_mem.h"
-
-#include <string.h>
 
 static void _dnx_mutex_uninit(dnx_mutex_t *mutex)
 {
-  if (mutex)
+  if (NULL != mutex)
   {
-    if (TRUE == mutex->created)
+    if (NULL != mutex->os_mutex)
     {
-      int os_rc = pthread_mutex_destroy(&mutex->os_mutex);
-      DNX_ASSERT(0 == os_rc);
+      BOOL os_rc = CloseHandle(mutex->os_mutex);
+      DNX_ASSERT(TRUE == os_rc);
     }
   }
 }
@@ -35,50 +31,45 @@ dnx_status_t dnx_mutex_init(dnx_mutex_t *mutex)
   int os_rc = 0;
   dnx_status_t rc = DNX_ERR_OK;
 
-  DNX_ASSERT(NULL != mutex);
+  mutex->os_mutex = CreateMutex(NULL, FALSE, NULL);
 
-  os_rc = pthread_mutex_init(&mutex->os_mutex, NULL);
-  if (0 != os_rc)
+  if (NULL == mutex->os_mutex)
   {
-    rc = dnx_os_err_to_dnx_err(os_rc);
+    rc = DNX_ERR_UNKNOWN;
     goto Exit;
   }
 
-  mutex->created = TRUE;
-
 Exit:
   if (DNX_ERR_OK != rc)
-    _dnx_mutex_uninit(mutex);
+    (void)_dnx_mutex_uninit(mutex);
 
   return rc;
 }
 
 void dnx_mutex_uninit(dnx_mutex_t *mutex)
 {
+  int os_rc = 0;
+
   DNX_ASSERT(NULL != mutex);
-  DNX_ASSERT(TRUE == mutex->created);
+  DNX_ASSERT(NULL != mutex->os_mutex);
 
   _dnx_mutex_uninit(mutex);
 }
 
-static void dnx_mutex_operation(dnx_mutex_t *mutex, bool_t lock)
-{ 
-  int os_rc = 0;
-
-  DNX_ASSERT(NULL != mutex);
-
-  os_rc = lock ? pthread_mutex_lock(&mutex->os_mutex) : 
-                 pthread_mutex_unlock(&mutex->os_mutex);
-  DNX_ASSERT (0 == os_rc);
-}
-
 void dnx_mutex_lock(dnx_mutex_t *mutex)
-{  
-  dnx_mutex_operation(mutex, TRUE);
+{
+  DWORD waitResult;
+  DNX_ASSERT(NULL != mutex);
+  DNX_ASSERT(NULL != mutex->os_mutex);
+
+  waitResult = WaitForSingleObject(mutex->os_mutex, INFINITE);
+
+  DNX_ASSERT(WAIT_OBJECT_0 == waitResult);
 }
 
 void dnx_mutex_unlock(dnx_mutex_t *mutex)
-{
-  dnx_mutex_operation(mutex, FALSE);
+{ 
+  BOOL os_rc = ReleaseMutex(mutex->os_mutex);
+  DNX_ASSERT(TRUE == os_rc);
 }
 
