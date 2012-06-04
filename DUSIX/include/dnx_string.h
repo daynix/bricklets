@@ -14,9 +14,13 @@
 #ifndef __DNX_STRING_H__
 #define __DNX_STRING_H__
 
-#include "dnx_types.h"
+#include "../src/shared/dnx_string.in"
 
-void *dnx_memset(void *ptr, int value, size_t num);
+/* String Interface */
+/*
+ * void *dnx_memset(void *ptr, int value, size_t num);
+ *
+ */
 
 #endif
 

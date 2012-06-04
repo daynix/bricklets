@@ -29,7 +29,6 @@
     <ClCompile Include="src\shared\dnx_rmlock.c" />
     <ClCompile Include="src\std\dnx_io.c" />
     <ClCompile Include="src\std\dnx_mem.c" />
-    <ClCompile Include="src\std\dnx_string.c" />
     <ClCompile Include="src\test\dnx_test.c" />
     <ClCompile Include="src\windows\user\dnx_event.c" />
     <ClCompile Include="src\windows\user\dnx_logger.c" />

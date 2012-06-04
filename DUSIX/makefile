@@ -23,7 +23,6 @@ DUSIX_SOURCES = src/std/dnx_mem.c \
 					src/linux/shared/dnx_err.c \
 					src/linux/user/dnx_event.c \
 					src/shared/dnx_rmlock.c \
-					src/std/dnx_string.c \
 					src/linux/user/dnx_thread.c
 
 APP_SOURCES = src/test/dnx_test.c src/test/dnx_main.c

@@ -11,12 +11,20 @@
 * See file LICENSE supplied with this package for the full license text.
 */
 
-#include "dnx_string.h"
+#ifndef __DNX_STRING_IN__
+#define __DNX_STRING_IN__
 
+#include "dnx_types.h"
+
+#if defined (__linux__) && defined (__KERNEL__)
 #include <asm/string.h>
+#else
+#include <string.h>
+#endif
 
-void *dnx_memset(void *ptr, int value, size_t num)
+static INLINE void *dnx_memset(void *ptr, int value, size_t num)
 {
   return memset(ptr, value, num);
 }
 
+#endif

@@ -24,12 +24,12 @@ typedef volatile uint32_t dnx_atomic32_t;
 
 #ifdef __linux__ 
 #ifdef __KERNEL__
-#include "../src/linux/kernel/dnx_atomic_lnx.h"
+#include "../src/linux/kernel/dnx_atomic.in"
 #else
-#include "../src/linux/user/dnx_atomic_lnx.h"
+#include "../src/linux/user/dnx_atomic.in"
 #endif
 #else
-#include "../src/windows/user/dnx_atomic_win.h"
+#include "../src/windows/user/dnx_atomic.in"
 #endif
 
 /* Atomic Ops Interface */

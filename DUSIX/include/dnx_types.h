@@ -36,6 +36,9 @@ typedef int bool_t;
 
 #ifdef _WIN32
 #define __func__ __FUNCTION__
+#define INLINE __inline
+#else
+#define INLINE inline
 #endif
 
 #endif

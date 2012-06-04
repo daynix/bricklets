@@ -21,7 +21,6 @@ DUSIX_KSOURCES = src/shared/dnx_rmlock.c \
 								 src/linux/kernel/dnx_mem.c \
 								 src/linux/kernel/dnx_time.c \
 								 src/linux/kernel/dnx_io.c \
-								 src/linux/kernel/dnx_string.c \
 								 src/linux/shared/dnx_err.c
 
 KMOD_SOURCES = src/test/dnx_kmain.c src/test/dnx_test.c
