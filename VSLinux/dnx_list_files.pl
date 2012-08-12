@@ -192,15 +192,54 @@ sub parse_config_file()
     close($configFileHandle);
 }
 
-sub dump_vs10_files($)
+sub dump_vs10_file($$)
 {
+  my $filedir = shift;
+  my $filename = shift;
+
+  print ("\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\" />\n");
+}
+
+sub dump_vs10_filter($$)
+{
+  my $filedir = shift;
+  my $filename = shift;
+
+  print ("\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\">\n");
+  if ($filedir ne ".")
+  {
+    print ("\t\t<Filter>".trim_leading_dot($filedir)."</Filter>\n");
+  }
+  print ("\t</ClCompile>\n");
+}
+
+sub dump_vs10_filterdef($)
+{
+  my $filedir = shift;
+
+  if ($filedir ne ".")
+  {
+    print ("\t<Filter Include=\"".trim_leading_dot($filedir)."\">\n");
+    print ("\t\t<UniqueIdentifier>". get_guid() . "</UniqueIdentifier>\n");
+    print ("\t</Filter>\n");
+  }
+}
+
+sub enum_vs10_files($$$)
+{
+  no strict 'refs';
+
   my $curr_dir = shift;
+  my $dir_callback = shift;
+  my $file_callback = shift;
 
   my $curr_dir_regexp = path_to_regexp($curr_dir);
   print_trace("Processing results list directory \"$curr_dir\", regexp \"$curr_dir_regexp\"\n");
   print_trace("Current results list @all_project_files\n");
 
   my @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
+
+  &{$dir_callback}($curr_dir) if $dir_callback;
 
   while(@curr_dir_list)
   {
@@ -212,9 +251,8 @@ sub dump_vs10_files($)
 
     if($curr_entry !~ m/\\/)
     {
-       #This is a file, print it and remove from list
-
-       print ("\t<ClCompile Include=\"".trim_leading_dot($curr_entry_full)."\" />\n");
+       #This is a file, process it and remove from list
+       &{$file_callback}($curr_dir, $curr_entry) if $file_callback;
 
        my $processedFileRegexp = path_to_regexp("$curr_dir\\$curr_entry");
        my @newFileList = grep(!/^$processedFileRegexp$/, @all_project_files);
@@ -226,100 +264,29 @@ sub dump_vs10_files($)
        my $sub_dir = $curr_entry;
        $sub_dir =~ s/^(.*?)\\.*/$1/;
 
-       dump_vs10_files("$curr_dir\\$sub_dir");
+       enum_vs10_files("$curr_dir\\$sub_dir", $dir_callback, $file_callback);
     }
 
     @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
   }
+}
+
+sub dump_vs10_files($)
+{
+  my $start_dir = shift;
+  enum_vs10_files($start_dir, "", "dump_vs10_file");
 }
 
 sub dump_vs10_filters($)
 {
-  my $curr_dir = shift;
-
-  my $curr_dir_regexp = path_to_regexp($curr_dir);
-  print_trace("Processing results list directory \"$curr_dir\", regexp \"$curr_dir_regexp\"\n");
-  print_trace("Current results list @all_project_files\n");
-
-  my @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
-
-  while(@curr_dir_list)
-  {
-    my $curr_entry_full = $curr_dir_list[0];
-    my $curr_entry = $curr_dir_list[0];
-    $curr_entry =~ s/^$curr_dir_regexp\\(.*)/$1/;
-
-    print_trace("Processing results list entry $curr_entry\n");
-
-    if($curr_entry !~ m/\\/)
-    {
-       #This is a file, print it and remove from list
-       print ("\t<ClCompile Include=\"".trim_leading_dot($curr_entry_full)."\">\n");
-       if ($curr_dir ne ".")
-       {
-         print ("\t\t<Filter>".trim_leading_dot($curr_dir)."</Filter>\n");
-       }
-       print ("\t</ClCompile>\n");
-
-       my $processedFileRegexp = path_to_regexp("$curr_dir\\$curr_entry");
-       my @newFileList = grep(!/^$processedFileRegexp$/, @all_project_files);
-       @all_project_files = @newFileList;
-    }
-    else
-    {
-       #This is a folder, print folder tag and go into recursion
-       my $sub_dir = $curr_entry;
-       $sub_dir =~ s/^(.*?)\\.*/$1/;
-
-       dump_vs10_filters("$curr_dir\\$sub_dir");
-    }
-
-    @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
-  }
+  my $start_dir = shift;
+  enum_vs10_files($start_dir, "", "dump_vs10_filter");
 }
 
 sub dump_vs10_filter_defs($)
 {
-  my $curr_dir = shift;
-
-  my $curr_dir_regexp = path_to_regexp($curr_dir);
-  print_trace("Processing results list directory \"$curr_dir\", regexp \"$curr_dir_regexp\"\n");
-  print_trace("Current results list @all_project_files\n");
-
-  my @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
-
-  if ($curr_dir ne ".")
-  {
-    print ("\t<Filter Include=\"".trim_leading_dot($curr_dir)."\">\n");
-    print ("\t\t<UniqueIdentifier>". get_guid() . "</UniqueIdentifier>\n");
-    print ("\t</Filter>\n");
-  }
-
-  while(@curr_dir_list)
-  {
-    my $curr_entry_full = $curr_dir_list[0];
-    my $curr_entry = $curr_dir_list[0];
-    $curr_entry =~ s/^$curr_dir_regexp\\(.*)/$1/;
-
-    print_trace("Processing results list entry $curr_entry\n");
-
-    if($curr_entry !~ m/\\/)
-    {
-       my $processedFileRegexp = path_to_regexp("$curr_dir\\$curr_entry");
-       my @newFileList = grep(!/^$processedFileRegexp$/, @all_project_files);
-       @all_project_files = @newFileList;
-    }
-    else
-    {
-       #This is a folder, print folder tag and go into recursion
-       my $sub_dir = $curr_entry;
-       $sub_dir =~ s/^(.*?)\\.*/$1/;
-
-       dump_vs10_filter_defs("$curr_dir\\$sub_dir");
-    }
-
-    @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
-  }
+  my $start_dir = shift;
+  enum_vs10_files($start_dir, "dump_vs10_filterdef", "");
 }
 
 my $guid_ctnr = 0;
