@@ -192,12 +192,16 @@ sub parse_config_file()
     close($configFileHandle);
 }
 
+my $vs10_files;
+my $vs10_filters;
+my $vs10_filterdefs;
+
 sub dump_vs10_file($$)
 {
   my $filedir = shift;
   my $filename = shift;
 
-  print ("\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\" />\n");
+  $vs10_files = $vs10_files."\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\" />\n";
 }
 
 sub dump_vs10_filter($$)
@@ -205,12 +209,12 @@ sub dump_vs10_filter($$)
   my $filedir = shift;
   my $filename = shift;
 
-  print ("\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\">\n");
+  $vs10_filters = $vs10_filters."\t<ClCompile Include=\"".trim_leading_dot("$filedir\\$filename")."\">\n";
   if ($filedir ne ".")
   {
-    print ("\t\t<Filter>".trim_leading_dot($filedir)."</Filter>\n");
+    $vs10_filters = $vs10_filters."\t\t<Filter>".trim_leading_dot($filedir)."</Filter>\n";
   }
-  print ("\t</ClCompile>\n");
+  $vs10_filters = $vs10_filters."\t</ClCompile>\n";
 }
 
 sub dump_vs10_filterdef($)
@@ -219,9 +223,9 @@ sub dump_vs10_filterdef($)
 
   if ($filedir ne ".")
   {
-    print ("\t<Filter Include=\"".trim_leading_dot($filedir)."\">\n");
-    print ("\t\t<UniqueIdentifier>". get_guid() . "</UniqueIdentifier>\n");
-    print ("\t</Filter>\n");
+    $vs10_filterdefs = $vs10_filterdefs."\t<Filter Include=\"".trim_leading_dot($filedir)."\">\n".
+                                        "\t\t<UniqueIdentifier>". get_guid() . "</UniqueIdentifier>\n".
+                                        "\t</Filter>\n";
   }
 }
 
@@ -271,22 +275,46 @@ sub enum_vs10_files($$$)
   }
 }
 
-sub dump_vs10_files($)
+sub vs10_file_dumper($$)
 {
-  my $start_dir = shift;
-  enum_vs10_files($start_dir, "", "dump_vs10_file");
+  my $filedir = shift;
+  my $filename = shift;
+
+  dump_vs10_file($filedir, $filename);
+  dump_vs10_filter($filedir, $filename);
 }
 
-sub dump_vs10_filters($)
+sub vs10_dir_dumper($)
 {
-  my $start_dir = shift;
-  enum_vs10_files($start_dir, "", "dump_vs10_filter");
+  my $filedir = shift;
+
+  dump_vs10_filterdef($filedir);
 }
 
-sub dump_vs10_filter_defs($)
+sub vs10_do_enum($)
 {
   my $start_dir = shift;
-  enum_vs10_files($start_dir, "dump_vs10_filterdef", "");
+
+  $vs10_files = "";
+  $vs10_filters = "";
+  $vs10_filterdefs = "";
+
+  enum_vs10_files($start_dir, "vs10_dir_dumper", "vs10_file_dumper");
+}
+
+sub dump_vs10_files()
+{
+   print($vs10_files);
+}
+
+sub dump_vs10_filters()
+{
+   print($vs10_filters);
+}
+
+sub dump_vs10_filter_defs()
+{
+   print($vs10_filterdefs);
 }
 
 my $guid_ctnr = 0;
@@ -395,6 +423,10 @@ print_log("Building configurations list...");
 build_configurations_list();
 print_log("DONE");
 
+print_log("Enumerating files...");
+vs10_do_enum(".");
+print_log("DONE");
+
 print_log("Generating project...");
 
 while (<STDIN>)
@@ -406,11 +438,11 @@ while (<STDIN>)
     my @temp_files_list = @all_project_files;
 
     if(trim($chomped_line) eq "__VS10_FILES__")
-      { dump_vs10_files("."); }
+      { dump_vs10_files(); }
     elsif(trim($chomped_line) eq "__VS10_FILTER__")
-      { dump_vs10_filters("."); }
+      { dump_vs10_filters(); }
     elsif(trim($chomped_line) eq "__VS10_DEFS__")
-      { dump_vs10_filter_defs("."); }
+      { dump_vs10_filter_defs(); }
     elsif(trim($chomped_line) eq "__VS10_CFGS__")
       { dump_vs10_build_configurations($build_cfg_template);
         clean_vs10_solution(); }
