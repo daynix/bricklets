@@ -229,21 +229,24 @@ sub dump_vs10_filterdef($)
   }
 }
 
-sub enum_vs10_files($$$)
+sub enum_vs10_files($$$$)
 {
   no strict 'refs';
 
   my $curr_dir = shift;
   my $dir_callback = shift;
   my $file_callback = shift;
+  my $filelist = shift;
 
   my $curr_dir_regexp = path_to_regexp($curr_dir);
   print_trace("Processing results list directory \"$curr_dir\", regexp \"$curr_dir_regexp\"\n");
-  print_trace("Current results list @all_project_files\n");
+  print_trace("Current results list @{ $filelist }\n");
 
-  my @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
+  my @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @{ $filelist });
 
   &{$dir_callback}($curr_dir) if $dir_callback;
+
+  my $processed_entry_regexp;
 
   while(@curr_dir_list)
   {
@@ -257,21 +260,20 @@ sub enum_vs10_files($$$)
     {
        #This is a file, process it and remove from list
        &{$file_callback}($curr_dir, $curr_entry) if $file_callback;
-
-       my $processedFileRegexp = path_to_regexp("$curr_dir\\$curr_entry");
-       my @newFileList = grep(!/^$processedFileRegexp$/, @all_project_files);
-       @all_project_files = @newFileList;
+       $processed_entry_regexp = path_to_regexp("\^$curr_dir\\$curr_entry\$");
     }
     else
     {
-       #This is a folder, print folder tag and go into recursion
+       #This is a folder, go into recursion
        my $sub_dir = $curr_entry;
        $sub_dir =~ s/^(.*?)\\.*/$1/;
 
-       enum_vs10_files("$curr_dir\\$sub_dir", $dir_callback, $file_callback);
+       enum_vs10_files("$curr_dir\\$sub_dir", $dir_callback, $file_callback, \@curr_dir_list);
+
+       $processed_entry_regexp = path_to_regexp("\^$curr_dir\\$sub_dir\\");
     }
 
-    @curr_dir_list = grep(/^$curr_dir_regexp\\.*/, @all_project_files);
+    @curr_dir_list = grep(!/$processed_entry_regexp/, @curr_dir_list);
   }
 }
 
@@ -299,7 +301,7 @@ sub vs10_do_enum($)
   $vs10_filters = "";
   $vs10_filterdefs = "";
 
-  enum_vs10_files($start_dir, "vs10_dir_dumper", "vs10_file_dumper");
+  enum_vs10_files($start_dir, "vs10_dir_dumper", "vs10_file_dumper", \@all_project_files);
 }
 
 sub dump_vs10_files()
