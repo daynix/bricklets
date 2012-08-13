@@ -13,6 +13,8 @@
 
 @ECHO OFF
 
+SETLOCAL ENABLEDELAYEDEXPANSION
+
 setlocal
 
 SET LINUX_SCRIPT=dnx_mkproj_lin
@@ -49,6 +51,7 @@ GOTO ParseCommandLine
 
 :ParamBuildPath
 SET BUILD_ROOT=%2
+SET BUILD_ROOT=!BUILD_ROOT:\=\\!
 SHIFT
 GOTO NextCommandLineParam
 
