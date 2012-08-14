@@ -15,9 +15,9 @@
 # NOTE: Source root directory passed via SRC_ROOT shell variable
 #
 SRC_ROOT_PARENT_DIR=$(lastword $(subst /, , $(SRC_ROOT)))
-VCXPROJ_FNAME:=VS_[$(SRC_ROOT_PARENT_DIR)].vcxproj
+VCXPROJ_FNAME:=VS_[$(SRC_ROOT_PARENT_DIR)]_$(USER).vcxproj
 VCXPROJ_FILTERS_FNAME:=$(VCXPROJ_FNAME).filters
-SLN_FNAME:=VS_[$(SRC_ROOT_PARENT_DIR)].sln
+SLN_FNAME:=VS_[$(SRC_ROOT_PARENT_DIR)]_$(USER).sln
 
 vcxproj:
 	@echo "Building VCXPROJ ($(VCXPROJ_FNAME))..."
