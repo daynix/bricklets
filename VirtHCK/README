@@ -1,0 +1,22 @@
+Daynix VirtHCK bricklet
+=================================================================
+
+VirtHCK bricklet is a set of Bourne shell scripts for running
+Microsoft HCK (Hardware Certification Kit) tests for VirtIO
+guest drivers. It creates isolated virtual network environment
+for HCK Studio (Controller) and HCK Client virtual machines (VMs)
+running on top of QEMU-KVM and allows to run all kind of HCK 
+tests in automated manner.
+
+General information
+=================================================================
+Copyright (c) 2013, Daynix Computing LTD (www.daynix.com)
+All rights reserved.
+
+Maintained by bricklets@daynix.com
+This file is a part of Bricklets library, see "Bricklets" page
+on www.daynix.com for more.
+
+This code is licensed under standard 3-clause BSD license.
+See file LICENSE supplied with this package for the full
+license text.
