@@ -76,9 +76,7 @@ case $TEST_DEV_TYPE in
 network)
    BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
    TEST_NET_DEVICES="-netdev tap,id=hostnet2,vhost=${VHOST_STATE},script=${HCK_ROOT}/hck_test_bridge_ifup.sh,downscript=no,ifname=`client_test_ifname 1`
-                     -device virtio-net-pci,netdev=hostnet2,mac=`client_test_mac 1`,bus=pci.0,id=`client_test_ifname 1`
-                     -netdev tap,id=hostnet3,vhost=${VHOST_STATE},script=${HCK_ROOT}/hck_test_bridge_ifup.sh,downscript=no,ifname=`client_test_ifname 2`
-                     -device virtio-net-pci,netdev=hostnet3,mac=`client_test_mac 2`,bus=pci.0,id=`client_test_ifname 2`"
+                     -device virtio-net-pci,netdev=hostnet2,mac=`client_test_mac 1`,bus=pci.0,id=`client_test_ifname 1`"
    ;;
 bootstorage)
    BOOT_STORAGE_PAIR="-drive file=`image_name`,if=none,id=vio_block,serial=${CLIENT_NUM}110${UNIQUE_ID}
