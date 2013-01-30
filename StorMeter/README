@@ -1,0 +1,20 @@
+Daynix StorMeter bricklet
+=================================================================
+
+StorMeter bricklet is a Perl script for running IOMeter tool 
+for Guest storage devices performance measuring and comparison. 
+It collects the performance statistics for different scenarios
+and exposes it in convenient and easily comparable form.
+
+General information
+=================================================================
+Copyright (c) 2013, Daynix Computing LTD (www.daynix.com)
+All rights reserved.
+
+Maintained by bricklets@daynix.com
+This file is a part of Bricklets library, see "Bricklets" page
+on www.daynix.com for more.
+
+This code is licensed under standard 3-clause BSD license.
+See file LICENSE supplied with this package for the full
+license text.
