@@ -41,6 +41,12 @@ client_test_mac()
   echo 56:cc:cc:0${CLIENT_NUM}:0${DEVICE_NUM}:cc
 }
 
+client_cpus()
+{
+  VAR_NAME=CLIENT${CLIENT_NUM}_CPUS
+  eval echo \$${VAR_NAME}
+}
+
 graphics_cmd()
 {
   VAR_NAME=GRAPHICS_CLIENT${CLIENT_NUM}
@@ -99,7 +105,7 @@ ${QEMU_BIN} \
         ${CTRL_NET_DEVICE} \
         ${TEST_NET_DEVICES} \
         ${WORLD_NET_IFACE} \
-        -m ${CLIENT_MEMORY} -smp ${CLIENT_CPUS} -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet -boot d \
+        -m ${CLIENT_MEMORY} -smp `client_cpus` -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet -boot d \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
         -name HCK-Client${CLIENT_NUM}_${UNIQUE_ID} \
         `graphics_cmd` ${SNAPSHOT_OPTION} `extra_cmd`
