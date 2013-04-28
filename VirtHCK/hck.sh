@@ -77,7 +77,7 @@ if [ "$#" -eq 0 ] || [ "$1" = "c2" ] || [ "$2" = "c2" ] || [ "$3" = "c2" ]; then
 fi
 sleep 2
 
-read -p "Press any key to disable VMs respawn..." NOT_NEEDED_VAR
+read -p "Press ENTER to disable VMs respawn..." NOT_NEEDED_VAR
 loop_run_stop
 echo VMs won\'t respawn anymore.
 wait
