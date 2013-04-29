@@ -13,4 +13,4 @@
 
 . `dirname $0`/hck_setup.cfg
 
-enslave_iface ${TEST_BR_NAME} $1
+enslave_test_iface ${TEST_BR_NAME} $1

@@ -34,20 +34,6 @@ fi
 SCRIPTS_DIR=`dirname $0`
 . ${SCRIPTS_DIR}/hck_setup.cfg
 
-remove_bridges() {
- ifconfig ${TEST_BR_NAME} down
- brctl delbr ${TEST_BR_NAME}
- ifconfig ${CTRL_BR_NAME} down
- brctl delbr ${CTRL_BR_NAME}
-}
-
-create_bridges() {
- brctl addbr ${TEST_BR_NAME} 2>&1 | grep -v "already exists"
- ifconfig ${TEST_BR_NAME} up
- brctl addbr ${CTRL_BR_NAME} 2>&1 | grep -v "already exists"
- ifconfig ${CTRL_BR_NAME} up
-}
-
 kill_jobs() {
   jobs -p > /tmp/.jobs_$$
   kill `cat /tmp/.jobs_$$ | tr '\n' ' '`
