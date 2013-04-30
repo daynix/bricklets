@@ -94,6 +94,10 @@ storage)
                       -device virtio-blk-pci,bus=pci.0,addr=0x5,drive=virtio_blk"
    prepare_test_image
    ;;
+serial)
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
+   TEST_SERIAL_DEVICES="-device virtio-serial-pci,id=virtio_serial_pci0,addr=0x07"
+   ;;
 esac
 
 CTRL_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=`client_ctrl_ifname`
@@ -104,6 +108,7 @@ ${QEMU_BIN} \
         ${TEST_STORAGE_PAIR} \
         ${CTRL_NET_DEVICE} \
         ${TEST_NET_DEVICES} \
+        ${TEST_SERIAL_DEVICES} \
         ${WORLD_NET_IFACE} \
         -m ${CLIENT_MEMORY} -smp `client_cpus` -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet -boot d \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
