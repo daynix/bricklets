@@ -80,26 +80,26 @@ prepare_test_image()
 
 case $TEST_DEV_TYPE in
 network)
-   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
    TEST_NET_DEVICES="-netdev tap,id=hostnet2,vhost=${VHOST_STATE},script=${HCK_ROOT}/hck_test_bridge_ifup.sh,downscript=no,ifname=`client_test_ifname 1`
                      -device virtio-net-pci,netdev=hostnet2,mac=`client_test_mac 1`,bus=pci.0,id=`client_test_ifname 1`"
    ;;
 bootstorage)
-   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=none,id=vio_block,serial=${CLIENT_NUM}110${UNIQUE_ID}
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=none,id=vio_block,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}
                       -device virtio-blk-pci,bus=pci.0,addr=0x5,drive=vio_block"
    ;;
 storage)
-   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
-   TEST_STORAGE_PAIR="-drive file=${TEST_IMAGE_NAME},if=none,id=virtio_blk,serial=${CLIENT_NUM}000${UNIQUE_ID}
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
+   TEST_STORAGE_PAIR="-drive file=${TEST_IMAGE_NAME},if=none,id=virtio_blk,serial=${CLIENT_NUM}000${UNIQUE_ID}${DRIVE_CACHE_OPTION}
                       -device virtio-blk-pci,bus=pci.0,addr=0x5,drive=virtio_blk"
    prepare_test_image
    ;;
 serial)
-   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
    TEST_SERIAL_DEVICES="-device virtio-serial-pci,id=virtio_serial_pci0,addr=0x07"
    ;;
 balloon)
-   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}"
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
    TEST_BALLOON_DEVICE="-device virtio-balloon-pci,bus=pci.0,addr=0x8"
    ;;
 esac

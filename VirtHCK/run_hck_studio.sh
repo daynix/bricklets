@@ -27,7 +27,7 @@ CTRL_NET_DEVICE="-netdev tap,id=hostnet1,script=${HCK_ROOT}/hck_ctrl_bridge_ifup
                 -device ${CTRL_NET_DEVICE},netdev=hostnet1,mac=${STUDIO_CONTROL_MAC},bus=pci.0,id=${STUDIO_CONTROL_IFNAME}"
 
 ${QEMU_BIN} \
-    -drive file=${STUDIO_IMAGE},if=ide \
+    -drive file=${STUDIO_IMAGE},if=ide${DRIVE_CACHE_OPTION} \
     ${WORLD_NET_DEVICE} \
     ${CTRL_NET_DEVICE} \
     -m 2G -smp 2 -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet -boot d \
