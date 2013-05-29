@@ -102,7 +102,7 @@ IF [%SSH_KEY%] == [] (
 )
 
 CALL :PrepareUniqueMKProj
-plink.exe -ssh %SSH_USER%@%BUILDER_ADDR% -X -i %SSH_KEY% "sh $VSLINUX_MAP_ROOT/%UNIQUE_SCRIPT_NAME% %BUILD_PARAMS%"
+plink.exe -ssh %SSH_USER%@%BUILDER_ADDR% -X -i %SSH_KEY% ". $VSLINUX_MAP_ROOT/%UNIQUE_SCRIPT_NAME% %BUILD_PARAMS%"
 CALL :RollbackUniqueMKProj
 GOTO End
 
