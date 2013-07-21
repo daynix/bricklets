@@ -12,9 +12,9 @@
     <NMakeOutput></NMakeOutput>
     <NMakeCleanCommandLine>$(ProjectDir)\VSLinux\dnx_mkproj_win.bat -p $(ProjectDir) -c "__CFG_CLEAN__"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>$(ProjectDir)\VSLinux\dnx_mkproj_win.bat -p $(ProjectDir) -c "__CFG_REBUILD__"</NMakeReBuildCommandLine>
-    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeForcedIncludes>$(ProjectDir)\.config.h</NMakeForcedIncludes>
-    <NMakeIncludeSearchPath>$(ProjectDir)\wireless\driver\linux</NMakeIncludeSearchPath>
+    <NMakePreprocessorDefinitions>__CFG_DEFINES__;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeForcedIncludes>__CFG_INCLUDES__</NMakeForcedIncludes>
+    <NMakeIncludeSearchPath>__CFG_INC_DIRS__</NMakeIncludeSearchPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='__CFG_NAME__|Win32'">
     <BuildLog>

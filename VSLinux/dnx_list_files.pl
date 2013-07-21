@@ -53,14 +53,20 @@ sub build_file_list()
 my $action_build = "build";
 my $action_clean = "clean";
 my $action_rebuild = "rebuild";
+my $config_defines = "defines";
+my $config_includes = "includes";
+my $config_inc_dirs = "inc_dirs";
 
-sub is_known_buildcfg_action($)
+sub is_known_buildcfg_cfgtype($)
 {
-  my $action = shift;
+  my $cfgtype = shift;
 
-  $action eq $action_build or
-  $action eq $action_clean or
-  $action eq $action_rebuild or
+  $cfgtype eq $action_build or
+  $cfgtype eq $action_clean or
+  $cfgtype eq $action_rebuild or
+  $cfgtype eq $config_defines or
+  $cfgtype eq $config_includes or
+  $cfgtype eq $config_inc_dirs or
   return 0;
 
   return 1;
@@ -89,12 +95,12 @@ sub build_configurations_list()
     if ($buildcfg_line =~ /^(.+)\.(\S+)\s*\=\s*(.+)$/)
     {
         my $cfg_name = trim($1);
-        my $action = trim($2);
+        my $cfgtype = trim($2);
         my $cmd = trim($3);
 
-        if(is_known_buildcfg_action($action))
+        if(is_known_buildcfg_cfgtype($cfgtype))
         {
-          $build_configurations{$cfg_name}{$action} = $cmd;
+          $build_configurations{$cfg_name}{$cfgtype} = $cmd;
           next;
         }
     }
@@ -367,16 +373,19 @@ sub dump_vs10_build_configurations($)
 {
   my $template = shift;
   my $cfgname;
-  my $actions = {};
+  my $cfgtypes = {};
 
-  while ( ($cfgname, $actions) = each %build_configurations ) {
+  while ( ($cfgname, $cfgtypes) = each %build_configurations ) {
     open CFGTPL, "$template" or die $!;
     while (<CFGTPL>) {
       my $line=$_;
       $line =~ s/__CFG_NAME__/$cfgname/g;
-      $line =~ s/__CFG_BUILD__/$actions->{$action_build}/g;
-      $line =~ s/__CFG_CLEAN__/$actions->{$action_clean}/g;
-      $line =~ s/__CFG_REBUILD__/$actions->{$action_rebuild}/g;
+      $line =~ s/__CFG_BUILD__/$cfgtypes->{$action_build}/g;
+      $line =~ s/__CFG_CLEAN__/$cfgtypes->{$action_clean}/g;
+      $line =~ s/__CFG_REBUILD__/$cfgtypes->{$action_rebuild}/g;
+      $line =~ s/__CFG_DEFINES__/$cfgtypes->{$config_defines}/g;
+      $line =~ s/__CFG_INCLUDES__/$cfgtypes->{$config_includes}/g;
+      $line =~ s/__CFG_INC_DIRS__/$cfgtypes->{$config_inc_dirs}/g;
       print $line;
     }
     close CFGTPL;

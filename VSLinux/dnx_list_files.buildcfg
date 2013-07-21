@@ -22,11 +22,23 @@
 #          <configuration name>.rebuild = <command>
 #      Configuration clean command:
 #          <configuration name>.clean = <command>
+#      Configuration built-in defines (;-separated):
+#          <configuration name>.defines = <semicolon_separated_list>
+#      Configuration built-in include files (;-separated):
+#          <configuration name>.includes = <semicolon_separated_list>
+#      Configuration built-in include folders (;-separated):
+#          <configuration name>.inc_dirs = <semicolon_separated_list>
+#
+# NOTE: All commands and lists may contain VS macros ($(ProjectDir), $(Configuration) etc.
 
 all.build    = make all
 all.rebuild  = make clean all
 all.clean    = make clean
+all.defines  = LINUX;__LINUX
+all.includes = $(ProjectDir)\$(Configuration)\.config.h
+all.inc_dirs = $(ProjectDir)\inc;$(ProjectDir)\asm\utils
 
 configure.build    = ./configure
 configure.rebuild  = ./configure
 configure.clean    = echo No clean for configure
+configure.defines  = LINUX;__LINUX
