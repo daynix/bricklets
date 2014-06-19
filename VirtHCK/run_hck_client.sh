@@ -102,6 +102,19 @@ balloon)
    BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
    TEST_BALLOON_DEVICE="-device virtio-balloon-pci,bus=pci.0,addr=0x8"
    ;;
+usb)
+   BOOT_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}"
+   TEST_STORAGE_PAIR="
+    -device usb-ehci,id=vhck_ehci
+    -drive if=none,id=usbdisk,serial=${CLIENT_NUM}000${UNIQUE_ID},file=${TEST_IMAGE_NAME}
+    -device usb-storage,bus=vhck_ehci.0,drive=usbdisk,id=vhck_usbdisk "
+
+    prepare_test_image
+    ;;
+  * )
+   echo "NOT IMPLEMENTED"
+   exit 1
+    ;;
 esac
 
 CTRL_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=`client_ctrl_ifname`
