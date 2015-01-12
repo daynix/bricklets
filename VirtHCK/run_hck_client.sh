@@ -59,6 +59,18 @@ extra_cmd()
   eval echo \$${VAR_NAME}
 }
 
+client_mq_netdev_param()
+{
+  VAR_NAME=CLIENT${CLIENT_NUM}_MQ_NETDEV_PARAM
+  eval echo \$${VAR_NAME}
+}
+
+client_mq_device_param()
+{
+  VAR_NAME=CLIENT${CLIENT_NUM}_MQ_DEVICE_PARAM
+  eval echo \$${VAR_NAME}
+}
+
 image_name()
 {
   VAR_NAME=CLIENT${CLIENT_NUM}_IMAGE
@@ -83,8 +95,8 @@ IDE_STORAGE_PAIR="-drive file=`image_name`,if=ide,serial=${CLIENT_NUM}110${UNIQU
 case $TEST_DEV_TYPE in
 network)
    BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
-   TEST_NET_DEVICES="-netdev tap,id=hostnet2,vhost=${VHOST_STATE},script=${HCK_ROOT}/hck_test_bridge_ifup.sh,downscript=no,ifname=`client_test_ifname 1`${MQ_NETDEV_PARAM}
-                     -device virtio-net-pci,netdev=hostnet2,mac=`client_test_mac 1`,bus=pci.0,id=`client_test_ifname 1`${MQ_DEVICE_PARAM}"
+   TEST_NET_DEVICES="-netdev tap,id=hostnet2,vhost=${VHOST_STATE},script=${HCK_ROOT}/hck_test_bridge_ifup.sh,downscript=no,ifname=`client_test_ifname 1`$(client_mq_netdev_param)
+                     -device virtio-net-pci,netdev=hostnet2,mac=`client_test_mac 1`,bus=pci.0,id=`client_test_ifname 1`$(client_mq_device_param)"
    ;;
 bootstorage)
    BOOT_STORAGE_PAIR="-drive file=`image_name`,if=none,id=vio_block,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}
@@ -134,3 +146,5 @@ ${QEMU_BIN} \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
         -name HCK-Client${CLIENT_NUM}_${UNIQUE_ID}_`hostname`${_TITLE_POSTFIX} \
         `graphics_cmd` ${SNAPSHOT_OPTION} `extra_cmd`
+
+
