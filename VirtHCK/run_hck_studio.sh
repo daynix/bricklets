@@ -30,7 +30,7 @@ ${QEMU_BIN} \
     -drive file=${STUDIO_IMAGE},if=ide${DRIVE_CACHE_OPTION} \
     ${WORLD_NET_DEVICE} \
     ${CTRL_NET_DEVICE} \
-    -m 512M -smp 1 -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet \
+    -m 768M -smp 1 -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet \
     -uuid 9999127c-8795-4e67-95da-8dd0a8891cd1 \
     -name HCK-Studio_${UNIQUE_ID}_`hostname`${_TITLE_POSTFIX} \
     -rtc base=localtime \
