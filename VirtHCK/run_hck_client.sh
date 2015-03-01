@@ -53,6 +53,12 @@ graphics_cmd()
   eval echo \$${VAR_NAME}
 }
 
+monitor_cmd()
+{
+  VAR_NAME=MONITOR_CLIENT${CLIENT_NUM}
+  eval echo \$${VAR_NAME}
+}
+
 extra_cmd()
 {
   VAR_NAME=CLIENT${CLIENT_NUM}_EXTRA
@@ -146,6 +152,4 @@ ${QEMU_BIN} \
 	-rtc base=localtime \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
         -name HCK-Client${CLIENT_NUM}_${UNIQUE_ID}_`hostname`${_TITLE_POSTFIX} \
-        `graphics_cmd` ${SNAPSHOT_OPTION} `extra_cmd` 
-
-
+        `graphics_cmd` `monitor_cmd` ${SNAPSHOT_OPTION} `extra_cmd`
