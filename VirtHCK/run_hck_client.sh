@@ -149,7 +149,7 @@ ${QEMU_BIN} \
         ${TEST_BALLOON_DEVICE} \
         ${WORLD_NET_IFACE} \
         -m ${CLIENT_MEMORY} -smp `client_cpus`,cores=`client_cpus` -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet -boot d \
-	-rtc base=localtime \
+	-M pc  -rtc-td-hack -no-kvm-pit-reinjection -rtc base=localtime,clock=host,driftfix=slew \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
         -name HCK-Client${CLIENT_NUM}_${UNIQUE_ID}_`hostname`${_TITLE_POSTFIX} \
         `graphics_cmd` `monitor_cmd` ${SNAPSHOT_OPTION} `extra_cmd`
