@@ -131,6 +131,10 @@ usb)
 
     prepare_test_image
     ;;
+video)
+   BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
+    ;;
+
   * )
    echo "NOT IMPLEMENTED"
    exit 1
