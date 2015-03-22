@@ -27,7 +27,7 @@ CTRL_NET_DEVICE="-netdev tap,id=hostnet1,script=${HCK_ROOT}/hck_ctrl_bridge_ifup
                 -device ${CTRL_NET_DEVICE},netdev=hostnet1,mac=${STUDIO_CONTROL_MAC},bus=pci.0,id=${STUDIO_CONTROL_IFNAME}"
 
 if [ ${SHARE_ON_HOST} != "false" ]; then
-  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST} -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
 fi
 
 ${QEMU_BIN} \

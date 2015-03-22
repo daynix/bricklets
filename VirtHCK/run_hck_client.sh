@@ -142,7 +142,7 @@ video)
 esac
 
 if [ ${SHARE_ON_HOST} != "false" ]; then
-  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST} -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
 fi
 
 CTRL_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=`client_ctrl_ifname`
