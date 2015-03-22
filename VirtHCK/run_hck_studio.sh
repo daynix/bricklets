@@ -26,10 +26,15 @@ WORLD_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_world_bridge_if
 CTRL_NET_DEVICE="-netdev tap,id=hostnet1,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=${STUDIO_CONTROL_IFNAME}
                 -device ${CTRL_NET_DEVICE},netdev=hostnet1,mac=${STUDIO_CONTROL_MAC},bus=pci.0,id=${STUDIO_CONTROL_IFNAME}"
 
+if [ ${SHARE_ON_HOST} != "false" ]; then
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST} -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+fi
+
 ${QEMU_BIN} \
     -drive file=${STUDIO_IMAGE},if=ide${DRIVE_CACHE_OPTION} \
     ${WORLD_NET_DEVICE} \
     ${CTRL_NET_DEVICE} \
+    ${FILE_TRANSFER_SETUP} \
     -m 768M -smp 1 -enable-kvm -cpu qemu64,+x2apic -usbdevice tablet \
     -uuid 9999127c-8795-4e67-95da-8dd0a8891cd1 \
     -name HCK-Studio_${UNIQUE_ID}_`hostname`${_TITLE_POSTFIX} \

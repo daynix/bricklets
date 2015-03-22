@@ -141,6 +141,10 @@ video)
     ;;
 esac
 
+if [ ${SHARE_ON_HOST} != "false" ]; then
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST} -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+fi
+
 CTRL_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=`client_ctrl_ifname`
                  -device ${CTRL_NET_DEVICE},netdev=hostnet0,mac=`client_ctrl_mac`,bus=pci.0,id=`client_ctrl_ifname`"
 
@@ -149,6 +153,7 @@ ${QEMU_BIN} \
         ${TEST_STORAGE_PAIR} \
         ${CTRL_NET_DEVICE} \
         ${TEST_NET_DEVICES} \
+        ${FILE_TRANSFER_SETUP} \
         ${TEST_SERIAL_DEVICES} \
         ${TEST_BALLOON_DEVICE} \
         ${WORLD_NET_IFACE} \
