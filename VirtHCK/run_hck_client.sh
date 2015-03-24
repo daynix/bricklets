@@ -157,7 +157,7 @@ ${QEMU_BIN} \
         ${TEST_SERIAL_DEVICES} \
         ${TEST_BALLOON_DEVICE} \
         ${WORLD_NET_IFACE} \
-        -m ${CLIENT_MEMORY} -smp `client_cpus`,cores=`client_cpus` -enable-kvm -cpu qemu64,+x2apic${ENLIGHTENMENTS_OPTION} -usbdevice tablet -boot d \
+        -m ${CLIENT_MEMORY} -smp `client_cpus`,cores=`client_cpus` -enable-kvm -cpu qemu64,+x2apic,model=13${ENLIGHTENMENTS_OPTION} -usbdevice tablet -boot d \
 	-M pc  -rtc-td-hack -no-kvm-pit-reinjection -rtc base=localtime,clock=host,driftfix=slew \
         -global PIIX4_PM.disable_s3=${S3_DISABLE_OPTION} -global PIIX4_PM.disable_s4=${S4_DISABLE_OPTION} \
         -uuid CDEF127c-8795-4e67-95da-8dd0a889100${CLIENT_NUM} \
