@@ -70,6 +70,14 @@ $RootPool.GetChildPools() | foreach {
         $TestPool = $_
         $TestPoolFlag = 1
     }
+    else
+    {
+        $CurrPool = $_
+        $CurrPool.GetMachines() | foreach {
+            write-host "Moving machine"$_.Name" to the Default Pool."
+            $CurrPool.MoveMachineTo($_, $DefaultPool)
+        }
+    }
 }
 if ($TestPoolFlag -eq "0")
 {
