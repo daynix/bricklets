@@ -44,7 +44,7 @@ then
     #
     sed "s/CL1-REPLACE/$cl1Name/" "$autoHCKFile" > "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/CL2-REPLACE/$cl2Name/" "$SMBShareDir/${autoHCKFile##*/}"
-    sed -i "s/DEVICE-REPLACE/$testDevice/" "$SMBShareDir/${autoHCKFile##*/}"
+    sed -i "s/DEVICE-REPLACE/$(printf "%q" "$testDevice")/" "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/TEST-REPLACE/$projectName/" "$SMBShareDir/${autoHCKFile##*/}"
     #
     sed "s/PASSWORD-REPLACE/$winPasswd/" "$sysSetupFile" > "$SMBShareDir/${sysSetupFile##*/}"
