@@ -57,8 +57,10 @@ then
     cp "$bgiFile" "$SMBShareDir/${bgiFile##*/}"
     # Create batch file to run AutoHCK
     echo '@echo off' > "$SMBShareDir/RunAutoHCK.bat"
+    echo 'pushd \\192.168.101.1\qemu' >> "$SMBShareDir/RunAutoHCK.bat"
     echo 'copy "\\192.168.101.1\qemu\'"${autoHCKFile##*/}"'" "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
     echo '%windir%\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -file "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
+    echo 'popd' >> "$SMBShareDir/RunAutoHCK.bat"
 elif [ $1 == "run" ]
 then
     echo "Running..."
