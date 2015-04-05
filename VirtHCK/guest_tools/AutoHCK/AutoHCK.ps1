@@ -37,7 +37,7 @@ Write-Host
 # Project name
 $PrjName = "TEST-REPLACE"
 # HW ID: Set the hardware to test (vendor, etc.)
-[string[]]$HardwareIds = "DEVICE-RPLACE" # Format: "PCI\VEN_XXXX&DEV_XXXX&SUBSYS_XXXXXXXX"
+[string[]]$HardwareIds = "DEVICE-REPLACE" # Format: "PCI\VEN_XXXX&DEV_XXXX&SUBSYS_XXXXXXXX"
 # Test machines names
 $TestMachineOne = "CL1-REPLACE"
 $TestMachineTwo = "CL2-REPLACE"
