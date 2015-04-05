@@ -35,12 +35,12 @@ Write-Host
 
 ############# Basic settings ################
 # Project name
-$PrjName = "MY_TEST"
+$PrjName = "TEST-REPLACE"
 # HW ID: Set the hardware to test (vendor, etc.)
-[string[]]$HardwareIds = "MY_DEVICE" # Format: "PCI\VEN_XXXX&DEV_XXXX&SUBSYS_XXXXXXXX"
+[string[]]$HardwareIds = "DEVICE-RPLACE" # Format: "PCI\VEN_XXXX&DEV_XXXX&SUBSYS_XXXXXXXX"
 # Test machines names
-$TestMachineOne = "CL1-WIN2012R2"
-$TestMachineTwo = "CL2-WIN2012R2"
+$TestMachineOne = "CL1-REPLACE"
+$TestMachineTwo = "CL2-REPLACE"
 #############################################
 
 # Get time
