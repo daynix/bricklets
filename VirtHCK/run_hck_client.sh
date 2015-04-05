@@ -34,6 +34,11 @@ client_ctrl_mac()
   echo 56:cc:cc:0${CLIENT_NUM}:cc:cc
 }
 
+client_transfer_mac()
+{
+  echo 56:aa:aa:0${CLIENT_NUM}:aa:aa
+}
+
 client_test_mac()
 {
   DEVICE_NUM=$1
@@ -142,7 +147,7 @@ video)
 esac
 
 if [ ${SHARE_ON_HOST} != "false" ]; then
-  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0,mac=`client_transfer_mac`"
 fi
 
 CTRL_NET_DEVICE="-netdev tap,id=hostnet0,script=${HCK_ROOT}/hck_ctrl_bridge_ifup.sh,downscript=no,ifname=`client_ctrl_ifname`

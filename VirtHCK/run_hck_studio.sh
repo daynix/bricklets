@@ -17,6 +17,7 @@ echo "Starting HCK studio..."
 
 STUDIO_CONTROL_IFNAME=cs_${UNIQUE_ID}
 STUDIO_CONTROL_MAC=56:cc:cc:ff:cc:cc
+STUDIO_TRANSFER_MAC=56:aa:aa:ff:aa:aa
 STUDIO_WORLD_IFNAME=ws_${UNIQUE_ID}
 STUDIO_WORLD_MAC=56:${UNIQUE_ID}:${UNIQUE_ID}:${UNIQUE_ID}:${UNIQUE_ID}:${UNIQUE_ID}
 
@@ -27,7 +28,7 @@ CTRL_NET_DEVICE="-netdev tap,id=hostnet1,script=${HCK_ROOT}/hck_ctrl_bridge_ifup
                 -device ${CTRL_NET_DEVICE},netdev=hostnet1,mac=${STUDIO_CONTROL_MAC},bus=pci.0,id=${STUDIO_CONTROL_IFNAME}"
 
 if [ ${SHARE_ON_HOST} != "false" ]; then
-  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0"
+  FILE_TRANSFER_SETUP="-netdev user,id=filenet0,smb=${SHARE_ON_HOST},restrict=on -device ${FILE_TRANSFER_DEVICE},netdev=filenet0,mac=${STUDIO_TRANSFER_MAC}"
 fi
 
 ${QEMU_BIN} \
