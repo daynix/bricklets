@@ -61,6 +61,8 @@ then
     echo 'copy "\\192.168.101.1\qemu\'"${autoHCKFile##*/}"'" "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
     echo '%windir%\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -file "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
     echo 'popd' >> "$SMBShareDir/RunAutoHCK.bat"
+    # Placing a file in SMB_SHARE to make it available to clients
+    touch "$SMBShareDir/USE_SHARE"
 elif [ $1 == "run" ]
 then
     echo "Running..."

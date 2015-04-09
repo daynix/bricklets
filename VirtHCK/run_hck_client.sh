@@ -146,7 +146,7 @@ video)
     ;;
 esac
 
-if [ ${SHARE_ON_HOST} != "false" ]; then
+if [ ${SHARE_ON_HOST} != "false" ] && [ -e "${SHARE_ON_HOST}/USE_SHARE" ]; then
   FILE_TRANSFER_SETUP="-netdev user,id=filenet0,net=192.168.101.0/24,dhcpstart=192.168.101.${CLIENT_NUM}00,smb=${SHARE_ON_HOST},smbserver=192.168.101.1,restrict=on \
                        -device ${FILE_TRANSFER_DEVICE},netdev=filenet0,mac=`client_transfer_mac`"
 fi

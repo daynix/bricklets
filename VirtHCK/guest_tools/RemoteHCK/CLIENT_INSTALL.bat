@@ -14,6 +14,11 @@ if not errorlevel 0 (
     echo "SUCEEDED"
 )
 
+echo The SMB share won't be avaliable on this machine after reboot.
+echo If needed, it can be activated again by placing a file named "USE_SHARE" there and restarting via a shutdown.
+
+del "\\192.168.101.1\qemu\USE_SHARE"
+
 echo Press ENTER to reboot the system...
 pause > NUL
 shutdown /t 10 /r /f
