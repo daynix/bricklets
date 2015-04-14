@@ -48,10 +48,13 @@ then
     sed -i "s/DEVICE-REPLACE/$(printf "%q" "$testDevice")/" "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/TEST-REPLACE/$projectName/" "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${sysSetupAuxFile##*/}"
+    sed -i "s|REPLACE-CONTROLLER-INST-FILE|${ControllerInstFile##*/}|g" "$SMBShareDir/${sysSetupAuxFile##*/}"
+    sed -i "s|REPLACE-CLIENT-INST-FILE|${ClientInstFile##*/}|g" "$SMBShareDir/${sysSetupAuxFile##*/}"
     #
     sed "s/PASSWORD-REPLACE/$winPasswd/" "$sysSetupFile" > "$SMBShareDir/${sysSetupFile##*/}"
     sed -i "s/BGI-REPLACE/${bgiFile##*/}/" "$SMBShareDir/${sysSetupFile##*/}"
     sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${sysSetupFile##*/}"
+    sed -i "s|REPLACE-SETUP-AUX|${sysSetupAuxFile##*/}|g" "$SMBShareDir/${sysSetupFile##*/}"
     #
     sed "s/REPLACE-HCK-VERSION/$HCKVersion/" "$ControllerInstFile" > "$SMBShareDir/${ControllerInstFile##*/}"
     sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${ControllerInstFile##*/}"

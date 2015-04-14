@@ -48,6 +48,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "BgInfo" /t REG_
 
 echo Setting additional parameters...
 
-copy "\\REPLACE-SMB-ADDRESS\qemu\SYS_SETUP_AUX.ps1" "C:\SYS_SETUP_AUX.ps1"
-@powershell -ExecutionPolicy RemoteSigned -file "C:\SYS_SETUP_AUX.ps1"
+copy "\\REPLACE-SMB-ADDRESS\qemu\REPLACE-SETUP-AUX" "C:\"
+@powershell -ExecutionPolicy RemoteSigned -file "C:\REPLACE-SETUP-AUX"
 
