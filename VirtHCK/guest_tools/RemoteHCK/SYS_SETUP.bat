@@ -5,7 +5,7 @@ timeout /t 30 /nobreak > NUL
 
 echo Mapping SMB_SHARE to drive X: ...
 
-net use X: \\192.168.101.1\qemu /p:yes
+net use X: \\REPLACE-SMB-ADDRESS\qemu /p:yes
 
 echo Enabling auto-logon for Administrator...
 
@@ -42,12 +42,12 @@ powercfg.exe -change -hibernate-timeout-ac 0
 
 echo Setting the informative wallpaper related material...
 
-copy "\\192.168.101.1\qemu\Bginfo.exe" "C:\"
-copy "\\192.168.101.1\qemu\BGI-REPLACE" "C:\"
+copy "\\REPLACE-SMB-ADDRESS\qemu\Bginfo.exe" "C:\"
+copy "\\REPLACE-SMB-ADDRESS\qemu\BGI-REPLACE" "C:\"
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "BgInfo" /t REG_SZ /d "C:\Bginfo.exe C:\BGI-REPLACE /TIMER:0 /NOLICPROMPT /SILENT" /f
 
 echo Setting additional parameters...
 
-copy "\\192.168.101.1\qemu\SYS_SETUP_AUX.ps1" "C:\SYS_SETUP_AUX.ps1"
+copy "\\REPLACE-SMB-ADDRESS\qemu\SYS_SETUP_AUX.ps1" "C:\SYS_SETUP_AUX.ps1"
 @powershell -ExecutionPolicy RemoteSigned -file "C:\SYS_SETUP_AUX.ps1"
 

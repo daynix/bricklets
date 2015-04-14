@@ -13,6 +13,7 @@ projectName='TEST-PROJ'
 SCRIPTS_DIR=`dirname $0`
 
 SMBShareDir="${SCRIPTS_DIR}/../../SMB_SHARE"
+SHARE_ON_HOST_ADDR='192.168.101.1'
 autoHCKFile="${SCRIPTS_DIR}/../AutoHCK/AutoHCK.ps1"
 sysSetupFile="${SCRIPTS_DIR}/SYS_SETUP.bat"
 sysSetupAuxFile="${SCRIPTS_DIR}/SYS_SETUP_AUX.ps1"
@@ -46,19 +47,22 @@ then
     sed -i "s/CL2-REPLACE/$cl2Name/" "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/DEVICE-REPLACE/$(printf "%q" "$testDevice")/" "$SMBShareDir/${autoHCKFile##*/}"
     sed -i "s/TEST-REPLACE/$projectName/" "$SMBShareDir/${autoHCKFile##*/}"
+    sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${sysSetupAuxFile##*/}"
     #
     sed "s/PASSWORD-REPLACE/$winPasswd/" "$sysSetupFile" > "$SMBShareDir/${sysSetupFile##*/}"
     sed -i "s/BGI-REPLACE/${bgiFile##*/}/" "$SMBShareDir/${sysSetupFile##*/}"
+    sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${sysSetupFile##*/}"
     #
     sed "s/REPLACE-HCK-VERSION/$HCKVersion/" "$ControllerInstFile" > "$SMBShareDir/${ControllerInstFile##*/}"
+    sed -i "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$SMBShareDir/${ControllerInstFile##*/}"
     #
-    cp "$ClientInstFile" "$SMBShareDir/${ClientInstFile##*/}"
+    sed "s/REPLACE-SMB-ADDRESS/$SHARE_ON_HOST_ADDR/g" "$ClientInstFile" > "$SMBShareDir/${ClientInstFile##*/}"
     #
     cp "$bgiFile" "$SMBShareDir/${bgiFile##*/}"
     # Create batch file to run AutoHCK
     echo '@echo off' > "$SMBShareDir/RunAutoHCK.bat"
-    echo 'pushd \\192.168.101.1\qemu' >> "$SMBShareDir/RunAutoHCK.bat"
-    echo 'copy "\\192.168.101.1\qemu\'"${autoHCKFile##*/}"'" "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
+    echo 'pushd \\'"$SHARE_ON_HOST_ADDR"'\qemu' >> "$SMBShareDir/RunAutoHCK.bat"
+    echo 'copy "\\'"$SHARE_ON_HOST_ADDR"'\qemu\'"${autoHCKFile##*/}"'" "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
     echo '%windir%\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -file "C:\'"${autoHCKFile##*/}"'"' >> "$SMBShareDir/RunAutoHCK.bat"
     echo 'popd' >> "$SMBShareDir/RunAutoHCK.bat"
     # Placing a file in SMB_SHARE to make it available to clients
@@ -66,7 +70,7 @@ then
 elif [ $1 == "run" ]
 then
     echo "Running..."
-    winexe -A "$credsFile" //"$controllerIP" '\\192.168.101.1\qemu\RunAutoHCK.bat'
+    winexe -A "$credsFile" //"$controllerIP" '\\'"$SHARE_ON_HOST_ADDR"'\qemu\RunAutoHCK.bat'
 elif [ $1 == "shutdown-studio" ]
 then
     echo "Shutting down HCK-STUDIO..."

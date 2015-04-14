@@ -11,7 +11,7 @@ if ( $NetAdd -ne $null )
    netsh interface ip set address name="$AdapterName" static 192.168.100.1 255.255.255.0;
    $NetAdd | Rename-NetAdapter -NewName "Control_e1000";
    Set-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce -Value "C:\CONTROLLER_INSTALL.bat"
-   Copy-Item "\\192.168.101.1\qemu\CONTROLLER_INSTALL.bat" "C:\"
+   Copy-Item "\\REPLACE-SMB-ADDRESS\qemu\CONTROLLER_INSTALL.bat" "C:\"
    Write-Host "Restarting in 30s"
    Start-Sleep -s 30
    Rename-Computer -NewName HCK-STUDIO -Force -Restart
@@ -24,7 +24,7 @@ if ( $NetAdd -ne $null )
    netsh interface ip set address name="$AdapterName" static 192.168.100.2 255.255.255.0;
    $NetAdd | Rename-NetAdapter -NewName "Control_e1000";
    Set-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce -Value "C:\CLIENT_INSTALL.bat"
-   Copy-Item "\\192.168.101.1\qemu\CLIENT_INSTALL.bat" "C:\"
+   Copy-Item "\\REPLACE-SMB-ADDRESS\qemu\CLIENT_INSTALL.bat" "C:\"
    Write-Host "Restarting in 30s"
    Start-Sleep -s 30
    Rename-Computer -NewName $TestMachineOne -Force -Restart
@@ -37,7 +37,7 @@ if ( $NetAdd -ne $null )
    netsh interface ip set address name="$AdapterName" static 192.168.100.3 255.255.255.0;
    $NetAdd | Rename-NetAdapter -NewName "Control_e1000";
    Set-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce -Value "C:\CLIENT_INSTALL.bat"
-   Copy-Item "\\192.168.101.1\qemu\CLIENT_INSTALL.bat" "C:\"
+   Copy-Item "\\REPLACE-SMB-ADDRESS\qemu\CLIENT_INSTALL.bat" "C:\"
    Write-Host "Restarting in 30s"
    Start-Sleep -s 30
    Rename-Computer -NewName $TestMachineTwo -Force -Restart

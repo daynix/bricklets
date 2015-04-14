@@ -5,7 +5,7 @@ echo Grab yourself a meal!
 echo Waiting 30s...
 timeout /t 30 /nobreak > NUL
 echo Performing the installation - be VERY patient!
-"\\192.168.101.1\qemu\Hardware Certification Kit\HCKSetup.exe" /q
+"\\REPLACE-SMB-ADDRESS\qemu\Hardware Certification Kit\HCKSetup.exe" /q
 
 if not errorlevel 0 (
     echo "FAILED"
@@ -15,7 +15,7 @@ if not errorlevel 0 (
 )
 
 echo Installing HCK Filters...
-expand -i "\\192.168.101.1\qemu\HCKFilterUpdates.cab" -f:UpdateFilters.sql "C:\Program Files (x86)\Windows Kits\REPLACE-HCK-VERSION\Hardware Certification Kit\Controller"
+expand -i "\\REPLACE-SMB-ADDRESS\qemu\HCKFilterUpdates.cab" -f:UpdateFilters.sql "C:\Program Files (x86)\Windows Kits\REPLACE-HCK-VERSION\Hardware Certification Kit\Controller"
 cd "C:\Program Files (x86)\Windows Kits\REPLACE-HCK-VERSION\Hardware Certification Kit\Controller"
 "C:\Program Files (x86)\Windows Kits\REPLACE-HCK-VERSION\Hardware Certification Kit\Controller\updatefilters.exe"
 
