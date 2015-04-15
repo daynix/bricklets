@@ -134,6 +134,10 @@ balloon)
    BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
    TEST_BALLOON_DEVICE="-device virtio-balloon-pci,bus=pci.0,addr=0x8"
    ;;
+rng)
+   BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
+   TEST_RNG_DEVICE="-device virtio-rng-pci,bus=pci.0,addr=0x9"
+   ;;
 usb)
    BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
    TEST_STORAGE_PAIR="
@@ -169,6 +173,7 @@ ${QEMU_BIN} \
         ${FILE_TRANSFER_SETUP} \
         ${TEST_SERIAL_DEVICES} \
         ${TEST_BALLOON_DEVICE} \
+        ${TEST_RNG_DEVICE} \
         ${WORLD_NET_IFACE} \
         -m ${CLIENT_MEMORY} -smp `client_cpus`,cores=`client_cpus` -enable-kvm -cpu qemu64,+x2apic,model=13${ENLIGHTENMENTS_OPTION} -usbdevice tablet -boot d \
 	-M pc -rtc-td-hack -global kvm-pit.lost_tick_policy=discard -rtc base=localtime,clock=host,driftfix=slew \
