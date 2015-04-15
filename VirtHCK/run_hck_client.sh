@@ -113,10 +113,17 @@ bootstorage)
    BOOT_STORAGE_PAIR="-drive file=`image_name`,if=none,id=vio_block,serial=${CLIENT_NUM}110${UNIQUE_ID}${DRIVE_CACHE_OPTION}
                       -device virtio-blk-pci,bus=pci.0,addr=0x5,drive=vio_block"
    ;;
-storage)
+storage-blk)
    BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
    TEST_STORAGE_PAIR="-drive file=${TEST_IMAGE_NAME},if=none,id=virtio_blk,serial=${CLIENT_NUM}000${UNIQUE_ID}${DRIVE_CACHE_OPTION}
                       -device virtio-blk-pci,bus=pci.0,addr=0x5,drive=virtio_blk"
+   prepare_test_image
+   ;;
+storage-scsi)
+   BOOT_STORAGE_PAIR="${IDE_STORAGE_PAIR}"
+   TEST_STORAGE_PAIR="-drive file=${TEST_IMAGE_NAME},if=none,id=virtio_scsi,serial=${CLIENT_NUM}000${UNIQUE_ID}${DRIVE_CACHE_OPTION}
+                      -device virtio-scsi-pci,id=scsi,bus=pci.0,addr=0x5
+                      -device scsi-hd,drive=virtio_scsi"
    prepare_test_image
    ;;
 serial)
