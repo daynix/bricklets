@@ -16,5 +16,7 @@ published Bricklets virtually any way and anywhere.
 All ideas, recommendations, bug-fixes and submissions are highly welcome.
 Reach us at bricklets@daynix.com
 
+Please find bricklets docummentaton at https://github.com/daynix/bricklets/wiki
+
 Best Regards,
 Daynix team (www.daynix.com)
