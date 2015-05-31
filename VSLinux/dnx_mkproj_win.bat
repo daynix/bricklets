@@ -4,8 +4,8 @@
 ::
 :: Maintained by bricklets@daynix.com
 ::
-:: This file is a part of Bricklets library, see "Bricklets" page
-:: on www.daynix.com for more.
+:: This file is a part of the Bricklets library, please see the wiki page
+:: on https://github.com/daynix/bricklets/wiki/Bricklets-library for more.
 ::
 :: This code is licensed under standard 3-clause BSD license.
 :: See file LICENSE supplied with this package for the full license text.
